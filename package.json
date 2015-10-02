@@ -8,6 +8,7 @@
     "eslint": "^1.5.1",
     "fs-extra": "^0.24.0",
     "jscs": "^2.2.1",
+    "phplint": "^1.6.1",
     "underscore": "^1.8.3"
   },
   "devDependencies": {

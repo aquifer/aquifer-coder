@@ -20,10 +20,13 @@ module.exports = function(Aquifer, AquiferCoderConfig) {
   AquiferCoder.commands = function () {
     return {
       'jslint': {
-        description: 'Lints and sniffs javascript code in the project for errors.'
+        description: 'Lints JavaScript code in the project for errors.'
       },
       'phplint': {
-        description: 'Lints and sniffs php code in the project for errors.'
+        description: 'Lints PHP code in the project for errors.'
+      },
+      'lint': {
+        description: 'Lints PHP and JavaScript code in the project for errors.'
       }
     };
   };
@@ -35,9 +38,16 @@ module.exports = function(Aquifer, AquiferCoderConfig) {
    * @param function callback function that is called when there is an error message to send.
    */
   AquiferCoder.run = function (command, options, callback) {
-    if (command === 'jslint') {
+    if (command === 'jslint' || command === 'lint') {
       Aquifer.console.log('Running linters on JavaScript code files...', 'notice');
       AquiferCoder.eslint();
+    }
+
+    if (command === 'phplint' || command === 'lint') {
+      Aquifer.console.log('Running linters on PHP code files...', 'notice');
+      AquiferCoder.phplint();
+      Aquifer.console.log('Running coding standards sniffers on PHP code files...', 'notice');
+      AquiferCoder.phpcs();
     }
   }
 
@@ -92,6 +102,34 @@ module.exports = function(Aquifer, AquiferCoderConfig) {
       // newline.
       console.log();
     });
+  }
+
+  /**
+   * Lints PHP code in codebase.
+   */
+  AquiferCoder.phplint = function () {
+    // Load phplint, and set up extensions.
+    var phplint = require('phplint').lint,
+        extensions = '{php,module,inc,install,test,profile,theme}';
+
+    // Run phplint on custom modules and themes.
+    phplint([
+      Aquifer.project.absolutePaths.modules.custom + '/**/*.' + extensions,
+      Aquifer.project.absolutePaths.modules.features + '/**/*.' + extensions,
+      Aquifer.project.absolutePaths.themes.custom + '/**/*.' + extensions,
+      Aquifer.project.directory + '/**/*.' + extensions,
+    ], function (err) {
+      if (err) {
+        console.log(err.message);
+      }
+    });
+  }
+
+  /**
+   * Runs phpcs on PHP code in codebase.
+   */
+  AquiferCoder.phpcs = function () {
+
   }
 
   return AquiferCoder;
