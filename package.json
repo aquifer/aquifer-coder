@@ -6,8 +6,8 @@
   "dependencies": {
     "gulp": "^3.9.0",
     "gulp-bump": "^1.0.0",
-    "gulp-help": "^1.6.1",
     "gulp-eslint": "^1.0.0",
+    "gulp-help": "^1.6.1",
     "gulp-jscs": "^3.0.1"
   },
   "devDependencies": {
