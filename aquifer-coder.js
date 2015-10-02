@@ -3,20 +3,23 @@
  * Coding standards sniffers and linters for Aquifer.
  */
 
-/**
- * Object containing Aquifer extension API methods to be invoked.
- */
-var AquiferCodingStandards = function(Aquifer, config) {
-  var self = this;
-  self.config = config;
+module.exports = function(Aquifer, AquiferCoderConfig) {
+
+  'use strict';
+
+  var AquiferCoder = function () {},
+      colors       = require('colors'),
+      _            = require('underscore'),
+      path         = require('path'),
+      fs           = require('fs-extra');
 
   /**
    * Creates a 'cs' command.
    * @return {object} commands to be added to Aquifer.
    */
-  self.commands = function () {
+  AquiferCoder.commands = function () {
     return {
-      'cs': {
+      'jslint': {
         description: 'Sniffs the custom code in a project for coding standards violations and linting errors.'
       }
     };
@@ -28,11 +31,61 @@ var AquiferCodingStandards = function(Aquifer, config) {
    * @param object options options passed from the command.
    * @param function callback function that is called when there is an error message to send.
    */
-  self.run = function (command, options, callback) {
-    console.log('yay');
+  AquiferCoder.run = function (command, options, callback) {
+    if (command === 'jslint') {
+      AquiferCoder.eslint();
+    }
   }
 
-  return self;
-};
+  /**
+   * Scan aquifer project source dirs for js issues.
+   */
+  AquiferCoder.eslint = function () {
+    var CLIEngine = require('eslint').CLIEngine;
 
-module.exports = AquiferCodingStandards
+    // Decide on an rc file for eslint.
+    var configFile = AquiferCoderConfig.eslintrc ? AquiferCoderConfig.eslintrc : '.eslintrc';
+    if (!fs.existsSync(path.join(Aquifer.project.directory, configFile))) {
+      configFile = path.join(__dirname, 'src', '.eslintrc');
+    }
+
+    // Create instance of eslint cli engine.
+    var eslint = new CLIEngine({
+      envs: ['browser'],
+      useEslintrc: true,
+      configFile: configFile
+    });
+
+    // Execute eslint on js files.
+    var report = eslint.executeOnFiles([
+      Aquifer.project.absolutePaths.modules.custom,
+      Aquifer.project.absolutePaths.modules.features,
+      Aquifer.project.absolutePaths.themes.custom,
+      Aquifer.project.directory + '/*.js'
+    ]);
+
+    // Loop through report results, and log accordingly.
+    _.forEach(report.results, function (item) {
+      // If no errors are found.
+      if (item.messages.length <= 0) {
+        console.log(item.filePath.bgGreen);
+        return;
+      }
+
+      // If errors are found, log filename, and construct error string.
+      console.log(item.filePath.bgRed);
+      var log = '';
+      _.forEach(item.messages, function(message) {
+        log = '';
+        if (message.fatal) {
+          log += 'Fatal ';
+        }
+
+        log += 'Error on line ' + new String(message.line).bgYellow + ' column ' + new String(message.column).bgYellow + ': ' + new String(message.message).red;
+        console.log(log + '\n');
+      });
+    });
+  }
+
+  return AquiferCoder;
+};
