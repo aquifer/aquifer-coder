@@ -1,0 +1,33 @@
+{
+  "name": "aquifer-coder",
+  "version": "0.0.1",
+  "description": "Coding standards sniffing and linting utility.",
+  "main": "aquifer-coder.js",
+  "dependencies": {
+    "gulp": "^3.9.0",
+    "gulp-bump": "^1.0.0",
+    "gulp-help": "^1.6.1",
+    "gulp-eslint": "^1.0.0",
+    "gulp-jscs": "^3.0.1"
+  },
+  "devDependencies": {
+    "gulp": "^3.9.0",
+    "gulp-bump": "^1.0.0",
+    "gulp-eslint": "^1.0.0",
+    "gulp-help": "^1.6.1",
+    "gulp-jscs": "^3.0.1"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/aquifer/aquifer-coder.git"
+  },
+  "author": " <Patrick Coffey patrickcoffey48@gmail.com>",
+  "license": "GPL-2.0",
+  "bugs": {
+    "url": "https://github.com/aquifer/aquifer-coder/issues"
+  },
+  "homepage": "https://github.com/aquifer/aquifer-coder#readme"
+}
