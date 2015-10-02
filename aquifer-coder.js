@@ -20,7 +20,10 @@ module.exports = function(Aquifer, AquiferCoderConfig) {
   AquiferCoder.commands = function () {
     return {
       'jslint': {
-        description: 'Sniffs the custom code in a project for coding standards violations and linting errors.'
+        description: 'Lints and sniffs javascript code in the project for errors.'
+      },
+      'phplint': {
+        description: 'Lints and sniffs php code in the project for errors.'
       }
     };
   };
@@ -33,12 +36,13 @@ module.exports = function(Aquifer, AquiferCoderConfig) {
    */
   AquiferCoder.run = function (command, options, callback) {
     if (command === 'jslint') {
+      Aquifer.console.log('Running linters on JavaScript code files...', 'notice');
       AquiferCoder.eslint();
     }
   }
 
   /**
-   * Scan aquifer project source dirs for js issues.
+   * Run eslint on custom files in project.
    */
   AquiferCoder.eslint = function () {
     var CLIEngine = require('eslint').CLIEngine;
@@ -68,7 +72,7 @@ module.exports = function(Aquifer, AquiferCoderConfig) {
     _.forEach(report.results, function (item) {
       // If no errors are found.
       if (item.messages.length <= 0) {
-        console.log(item.filePath.bgGreen);
+        console.log(item.filePath.bgGreen + '\n');
         return;
       }
 
@@ -82,8 +86,11 @@ module.exports = function(Aquifer, AquiferCoderConfig) {
         }
 
         log += 'Error on line ' + new String(message.line).bgYellow + ' column ' + new String(message.column).bgYellow + ': ' + new String(message.message).red;
-        console.log(log + '\n');
+        console.log(log);
       });
+
+      // newline.
+      console.log();
     });
   }
 
