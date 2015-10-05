@@ -5,7 +5,7 @@ Coding standards sniffing and linting utility for Aquifer projects.
 To install this extension, in your Aquifer project, run:
 
 ```bash
-aquifer-extension add aquifer-coder
+aquifer extension-add aquifer-coder
 ```
 
 ## Use
