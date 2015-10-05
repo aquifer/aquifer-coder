@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<ruleset name="DCS">
+    <description>Drupal coding standards ruleset.</description>
+    <!-- Include the whole Drupal standard -->
+    <rule ref="./vendor/drupalmodule/coder/coder_sniffer/Drupal">
+    </rule>
+</ruleset>
