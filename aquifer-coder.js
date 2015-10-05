@@ -17,7 +17,7 @@ module.exports = function(Aquifer, AquiferCoderConfig) {
   // Create defauts for options.
   _.defaults(AquiferCoderConfig, {
     eslintrc: path.join(__dirname, 'src', '.eslintrc'),
-    phpcsrc: path.join(__dirname, 'src', '.phpcsrc.xml')
+    phpcsStandard: path.join(__dirname, '/vendor/drupalmodule/coder/coder_sniffer/Drupal')
   });
 
   /**
@@ -117,8 +117,7 @@ module.exports = function(Aquifer, AquiferCoderConfig) {
     phplint([
       Aquifer.project.absolutePaths.modules.custom + '/**/*.' + extensions,
       Aquifer.project.absolutePaths.modules.features + '/**/*.' + extensions,
-      Aquifer.project.absolutePaths.themes.custom + '/**/*.' + extensions,
-      Aquifer.project.directory + '/**/*.' + extensions,
+      Aquifer.project.absolutePaths.themes.custom + '/**/*.' + extensions
     ], function (err) {
       if (err) {
         console.log(err.message);
@@ -133,7 +132,7 @@ module.exports = function(Aquifer, AquiferCoderConfig) {
     var extensions = '{php,module,inc,install,test,profile,theme}';
     var command = [
       path.join(__dirname, '/vendor/bin/phpcs'),
-      '--standard="' + AquiferCoderConfig.phpcsrc + '"',
+      '--standard="' + AquiferCoderConfig.phpcsStandard + '"',
       '--extensions="php,module,inc,install,test,profile,theme"',
       Aquifer.project.absolutePaths.modules.custom,
       Aquifer.project.absolutePaths.modules.features,
