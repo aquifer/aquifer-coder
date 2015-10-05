@@ -1,6 +1,6 @@
 {
   "name": "aquifer-coder",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Coding standards sniffing and linting utility.",
   "main": "aquifer-coder.js",
   "dependencies": {
