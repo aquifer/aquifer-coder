@@ -9,9 +9,16 @@ module.exports = function(Aquifer, AquiferCoderConfig) {
 
   var AquiferCoder = function () {},
       colors       = require('colors'),
-      _            = require('underscore'),
+      _            = require('lodash'),
       path         = require('path'),
-      fs           = require('fs-extra');
+      fs           = require('fs-extra'),
+      syncExec     = require('sync-exec');
+
+  // Create defauts for options.
+  _.defaults(AquiferCoderConfig, {
+    eslintrc: path.join(__dirname, 'src', '.eslintrc'),
+    phpcsrc: path.join(__dirname, 'src', '.phpcsrc.xml')
+  });
 
   /**
    * Creates a 'cs' command.
@@ -57,17 +64,11 @@ module.exports = function(Aquifer, AquiferCoderConfig) {
   AquiferCoder.eslint = function () {
     var CLIEngine = require('eslint').CLIEngine;
 
-    // Decide on an rc file for eslint.
-    var configFile = AquiferCoderConfig.eslintrc ? AquiferCoderConfig.eslintrc : '.eslintrc';
-    if (!fs.existsSync(path.join(Aquifer.project.directory, configFile))) {
-      configFile = path.join(__dirname, 'src', '.eslintrc');
-    }
-
     // Create instance of eslint cli engine.
     var eslint = new CLIEngine({
       envs: ['browser'],
       useEslintrc: true,
-      configFile: configFile
+      configFile: AquiferCoderConfig.eslintrc
     });
 
     // Execute eslint on js files.
@@ -129,7 +130,21 @@ module.exports = function(Aquifer, AquiferCoderConfig) {
    * Runs phpcs on PHP code in codebase.
    */
   AquiferCoder.phpcs = function () {
+    var extensions = '{php,module,inc,install,test,profile,theme}';
+    var command = [
+      path.join(__dirname, '/vendor/bin/phpcs'),
+      '--standard="' + AquiferCoderConfig.phpcsrc + '"',
+      '--extensions="php,module,inc,install,test,profile,theme"',
+      Aquifer.project.absolutePaths.modules.custom,
+      Aquifer.project.absolutePaths.modules.features,
+      Aquifer.project.absolutePaths.themes.custom
+    ].join(' ');
 
+    var report = syncExec(command);
+    if (report.stdout.length > 0) {
+      // Log report, and remove silly Code Sniffer 2.0 ad.
+      console.log(report.stdout.split('UPGRADE TO PHP_CODESNIFFER 2.0 TO FIX ERRORS AUTOMATICALLY')[0]);
+    }
   }
 
   return AquiferCoder;
