@@ -20,7 +20,7 @@ Running any of these commands will create a report that outlines any coding stan
 ## Configuration
 You might not want to use the eslint rules provided with this extension, or the Drupal Coding Standards. This extension provides two optional parameters:
 
-_in your `aquifer.json` file:
+_in your `aquifer.json` file:_
 ```javascript
 ...
 "extensions": {
