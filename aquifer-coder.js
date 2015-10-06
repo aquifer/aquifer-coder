@@ -3,6 +3,12 @@
  * Coding standards sniffers and linters for Aquifer.
  */
 
+/**
+ * Extension that is exported to Aquifer.
+ * @param {object} Aquifer instance of Aquifer containing an active project.
+ * @param {object} AquiferCoderConfig config object passed in from Aquifer project's json file.
+ * @returns {function} object that consumes Aquifer's extension API.
+ */
 module.exports = function(Aquifer, AquiferCoderConfig) {
 
   'use strict';
@@ -21,8 +27,8 @@ module.exports = function(Aquifer, AquiferCoderConfig) {
   });
 
   /**
-   * Creates a 'cs' command.
-   * @return {object} commands to be added to Aquifer.
+   * Creates a commands that are exported to Aquifer command.
+   * @returns {object} commands to be added to Aquifer.
    */
   AquiferCoder.commands = function () {
     return {
@@ -39,17 +45,17 @@ module.exports = function(Aquifer, AquiferCoderConfig) {
   };
 
   /**
-   * Sniffs custom code for problems when 'aquifer cs' is invoked.
-   * @param string command string representing the name of the command that is being run.
-   * @param object options options passed from the command.
-   * @param function callback function that is called when there is an error message to send.
+   * Runs sniffers and linters depending on the command being run.
+   * @param {string} command string representing the name of the command that is being run.
+   * @param {object} options options passed from the command.
+   * @param {function} callback function that is called when there is an error message to send.
+   * @returns {undefined} nothing.
    */
   AquiferCoder.run = function (command, options, callback) {
     if (command === 'jslint' || command === 'lint') {
       Aquifer.console.log('Running linters on JavaScript code files...', 'notice');
       AquiferCoder.eslint();
     }
-
     if (command === 'phplint' || command === 'lint') {
       Aquifer.console.log('Running linters on PHP code files...', 'notice');
       AquiferCoder.phplint();
@@ -60,6 +66,7 @@ module.exports = function(Aquifer, AquiferCoderConfig) {
 
   /**
    * Run eslint on custom files in project.
+   * @returns {undefined} nothing.
    */
   AquiferCoder.eslint = function () {
     var CLIEngine = require('eslint').CLIEngine;
@@ -107,6 +114,7 @@ module.exports = function(Aquifer, AquiferCoderConfig) {
 
   /**
    * Lints PHP code in codebase.
+   * @returns {undefined} nothing.
    */
   AquiferCoder.phplint = function () {
     // Load phplint, and set up extensions.
@@ -127,6 +135,7 @@ module.exports = function(Aquifer, AquiferCoderConfig) {
 
   /**
    * Runs phpcs on PHP code in codebase.
+   * @returns {undefined} nothing.
    */
   AquiferCoder.phpcs = function () {
     var extensions = '{php,module,inc,install,test,profile,theme}';
