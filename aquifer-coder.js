@@ -145,6 +145,7 @@ module.exports = function(Aquifer, AquiferCoderConfig) {
       path.join(__dirname, '/vendor/bin/phpcs'),
       '--standard="' + AquiferCoderConfig.phpcsStandard + '"',
       '--extensions="php,module,inc,install,test,profile,theme"',
+      '--ignore="*.apachesolr_environments.inc,*.apachesolr_search_defaults.inc,*.context.inc,*.features.*.inc,*.features.inc,*.field_group.inc,*.pages_default.inc,*.strongarm.inc,*.views_default.inc"',
       Aquifer.project.absolutePaths.modules.custom,
       Aquifer.project.absolutePaths.modules.features,
       Aquifer.project.absolutePaths.themes.custom
