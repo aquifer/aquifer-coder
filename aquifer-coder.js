@@ -20,12 +20,24 @@ module.exports = function(Aquifer, AquiferCoderConfig) {
       fs           = require('fs-extra'),
       syncExec     = require('sync-exec');
 
+  // Turn any passed-in paths into full paths.
+  if (AquiferCoderConfig.hasOwnProperty('eslintrc')) {
+    AquiferCoderConfig.eslintrc = path.join(Aquifer.projectDir, AquiferCoderConfig.eslintrc);
+  }
+  if (AquiferCoderConfig.hasOwnProperty('eslintIgnore')) {
+    AquiferCoderConfig.eslintIgnore = path.join(Aquifer.projectDir, AquiferCoderConfig.eslintIgnore);
+  }
+  if (AquiferCoderConfig.hasOwnProperty('phpcsStandard')) {
+    AquiferCoderConfig.phpcsStandard = path.join(Aquifer.projectDir, AquiferCoderConfig.phpcsStandard);
+  }
+
   // Create defauts for options.
   _.defaults(AquiferCoderConfig, {
     eslintrc: path.join(__dirname, 'src', '.eslintrc'),
     eslintIgnore: path.join(__dirname, 'src', '.eslintignore'),
     phpcsStandard: path.join(__dirname, '/vendor/drupalmodule/coder/coder_sniffer/Drupal')
   });
+
 
   /**
    * Creates a commands that are exported to Aquifer command.

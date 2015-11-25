@@ -26,8 +26,9 @@ _in your `aquifer.json` file:_
 "extensions": {
   "aquifer-coder": {
     "source": "aquifer-coder",
-    "eslintrc": "/path/to/eslintrc",
-    "phpcsStandard": "/path/to/phpcsStandardFile"
+    "eslintrc": "relative/path/to/.eslintrc",
+    "eslintIgnore": "relative/path/to/.eslintignore"
+    "phpcsStandard": "relative/path/to/phpcsStandardFile"
   }
 }
 ...
