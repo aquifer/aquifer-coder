@@ -1,0 +1,6 @@
+# Ignore minified files.
+**/*.min.js
+
+# Ignore vendor files.
+**/node_modules/**/*.js
+**/bower_components/**/*.js

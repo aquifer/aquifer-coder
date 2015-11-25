@@ -23,6 +23,7 @@ module.exports = function(Aquifer, AquiferCoderConfig) {
   // Create defauts for options.
   _.defaults(AquiferCoderConfig, {
     eslintrc: path.join(__dirname, 'src', '.eslintrc'),
+    eslintIgnore: path.join(__dirname, 'src', '.eslintignore'),
     phpcsStandard: path.join(__dirname, '/vendor/drupalmodule/coder/coder_sniffer/Drupal')
   });
 
@@ -75,7 +76,9 @@ module.exports = function(Aquifer, AquiferCoderConfig) {
     var eslint = new CLIEngine({
       envs: ['browser'],
       useEslintrc: true,
-      configFile: AquiferCoderConfig.eslintrc
+      configFile: AquiferCoderConfig.eslintrc,
+      ignore: true,
+      ignorePath: AquiferCoderConfig.eslintIgnore
     });
 
     // Execute eslint on js files.
@@ -138,7 +141,6 @@ module.exports = function(Aquifer, AquiferCoderConfig) {
    * @returns {undefined} nothing.
    */
   AquiferCoder.phpcs = function () {
-    var extensions = '{php,module,inc,install,test,profile,theme}';
     var command = [
       path.join(__dirname, '/vendor/bin/phpcs'),
       '--standard="' + AquiferCoderConfig.phpcsStandard + '"',
