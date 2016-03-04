@@ -9,7 +9,7 @@
         "name": "drupalmodule/coder",
         "version": "7.2.5",
         "dist": {
-          "url": "http://ftp.drupal.org/files/projects/coder-7.x-2.5.zip",
+          "url": "https://ftp.drupal.org/files/projects/coder-7.x-2.5.zip",
           "type": "zip"
         }
       }
