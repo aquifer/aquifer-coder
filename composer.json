@@ -1,7 +1,7 @@
 {
   "name": "aquifer-coder",
   "description": "Coding standards sniffing and linting utility.",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "repositories": [
     {
       "type": "package",
