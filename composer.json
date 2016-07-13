@@ -7,9 +7,9 @@
       "type": "package",
       "package": {
         "name": "drupalmodule/coder",
-        "version": "7.2.5",
+        "version": "7.2.6",
         "dist": {
-          "url": "http://ftp.drupal.org/files/projects/coder-7.x-2.5.zip",
+          "url": "http://ftp.drupal.org/files/projects/coder-7.x-2.6.zip",
           "type": "zip"
         }
       }
