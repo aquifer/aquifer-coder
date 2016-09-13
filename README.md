@@ -42,7 +42,7 @@ _in your `aquifer.json` file:_
         "modules/custom",
         "themes/custom"
       ],
-      extensions: "php,module,inc,install,test,profile,theme"
+      "extensions": "php,module,inc,install,test,profile,theme"
     }
   }
 }
