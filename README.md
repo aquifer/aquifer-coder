@@ -18,7 +18,7 @@ This extension adds a few commands to the Aquifer CLI within your project:
 Running any of these commands will create a report that outlines any coding standards violations or linting errors in your codebase. A default set of eslint rules is provided, and the Drupal Coding Standards PHPCodesniffer rules are used.
 
 ## Configuration
-You might not want to use the eslint rules provided with this extension, or the Drupal Coding Standards. This extension provides two optional parameters:
+You might not want to use the eslint rules, Drupal Coding Standards, or other default configurations defined by this extension. In such cases, you can override the defaults using these examples:
 
 _in your `aquifer.json` file:_
 ```javascript
@@ -26,9 +26,24 @@ _in your `aquifer.json` file:_
 "extensions": {
   "aquifer-coder": {
     "source": "aquifer-coder",
-    "eslintrc": "relative/path/to/.eslintrc",
-    "eslintIgnore": "relative/path/to/.eslintignore"
-    "phpcsStandard": "relative/path/to/phpcsStandardFile"
+    "eslint": {
+      "config": "relative/path/to/.eslintrc",
+      "ignore": "relative/path/to/.eslintignore"
+      "targets": [
+        "modules/custom",
+        "themes/custom",
+        "*.js"
+      ]
+    },
+    "phpcs": {
+      "config": "relative/path/to/phpcsStandardFile"
+      "ignore": "*.views_default.inc,*.context.inc"
+      "targets": [
+        "modules/custom",
+        "themes/custom"
+      ],
+      extensions: "php,module,inc,install,test,profile,theme"
+    }
   }
 }
 ...
