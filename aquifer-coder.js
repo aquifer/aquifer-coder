@@ -43,7 +43,7 @@ module.exports = function(Aquifer, AquiferCoderConfig) {
       config: path.join(__dirname, 'src', '.eslintrc'),
       ignore: path.join(__dirname, 'src', '.eslintignore'),
       targets: [
-        './modules/custom',
+        'modules/custom',
         'themes/custom',
         '*.js'
       ]
@@ -66,13 +66,31 @@ module.exports = function(Aquifer, AquiferCoderConfig) {
   AquiferCoder.commands = function () {
     return {
       'jslint': {
-        description: 'Lints JavaScript code in the project for errors.'
+        description: 'Lints JavaScript code in the project for errors.',
+        options: {
+          target: {
+            name: '-t, --target <target>',
+            description: 'Relative path to the target file or directory to lint.'
+          }
+        }
       },
       'phplint': {
-        description: 'Lints PHP code in the project for errors.'
+        description: 'Lints PHP code in the project for errors.',
+        options: {
+          target: {
+            name: '-t, --target <target>',
+            description: 'Relative path to the target file or directory to lint.'
+          }
+        }
       },
       'lint': {
-        description: 'Lints PHP and JavaScript code in the project for errors.'
+        description: 'Lints PHP and JavaScript code in the project for errors.',
+        options: {
+          target: {
+            name: '-t, --target <target>',
+            description: 'Relative path to the target file or directory to lint.'
+          }
+        }
       }
     };
   };
@@ -86,19 +104,76 @@ module.exports = function(Aquifer, AquiferCoderConfig) {
    */
   AquiferCoder.run = function (command, options, callback) {
     if (command === 'jslint' || command === 'lint') {
-      if (AquiferCoderConfig.hasOwnProperty('eslint')
+      // If target path was passed in as an option, lint that path.
+      if (options.target) {
+        let absolutePath = path.join(Aquifer.project.directory, options.target),
+            stat = fs.lstatSync(absolutePath);
+
+        // Validate the target exists.
+        if (fs.existsSync(absolutePath)) {
+          // If the target is a file, validate is has an allowed extension.
+          if (stat.isFile() && options.target.split('.').pop() !== 'js') {
+            // If the command was specifically jslint, log the invalid
+            // extension. Otherwise, just skip Javascript linting.
+            if (command === 'jslint') {
+              Aquifer.console.log('Target file is not a Javascript file: ' + options.target, 'error');
+            }
+          }
+          // Proceed with linting.
+          else {
+            Aquifer.console.log('Running Javascript linters on: ' + options.target, 'notice');
+            AquiferCoder.eslint([options.target]);
+          }
+        }
+        // Target doesn't exist.
+        else {
+          Aquifer.console.log('Target does not exist: ' + absolutePath, 'error');
+        }
+      }
+      // Lint the entire project.
+      else if (AquiferCoderConfig.hasOwnProperty('eslint')
         && AquiferCoderConfig.eslint.hasOwnProperty('targets')
         && AquiferCoderConfig.eslint.targets.length) {
         Aquifer.console.log('Running linters on JavaScript code files...', 'notice');
         AquiferCoder.eslint(AquiferCoderConfig.eslint.targets);
       }
+      // No valid targets were provided.
       else {
         Aquifer.console.log('No targets defined for Javascript linting.', 'notice');
       }
     }
 
     if (command === 'phplint' || command === 'lint') {
-      if (AquiferCoderConfig.hasOwnProperty('phpcs')
+      // If target path was passed in as an option, lint that path.
+      if (options.target) {
+        let absolutePath = path.join(Aquifer.project.directory, options.target),
+            stat = fs.lstatSync(absolutePath);
+
+        // Validate the target exists.
+        if (fs.existsSync(absolutePath)) {
+          let extensionsArr = AquiferCoderConfig.phpcs.extensions.split(',');
+
+          // If the target is a file, validate is has an allowed extension.
+          if (stat.isFile() && extensionsArr.indexOf(options.target.split('.').pop()) < 0) {
+            // If the command was specifically phplint, log the invalid
+            // extension. Otherwise, just skip PHP linting.
+            if (command === 'phplint') {
+              Aquifer.console.log('Target file does not have a recognized PHP extension for this project: ' + options.target, 'error');
+            }
+          }
+          // Proceed with linting.
+          else {
+            Aquifer.console.log('Running PHP linters on: ' + options.target, 'notice');
+            AquiferCoder.phpcs([options.target]);
+          }
+        }
+        // Target doesn't exist.
+        else {
+          Aquifer.console.log('Target does not exist: ' + absolutePath, 'error');
+        }
+      }
+      // Lint the entire project.
+      else if (AquiferCoderConfig.hasOwnProperty('phpcs')
         && AquiferCoderConfig.phpcs.hasOwnProperty('targets')
         && AquiferCoderConfig.phpcs.targets.length) {
         Aquifer.console.log('Running linters on PHP code files...', 'notice');
@@ -106,6 +181,7 @@ module.exports = function(Aquifer, AquiferCoderConfig) {
         Aquifer.console.log('Running coding standards sniffers on PHP code files...', 'notice');
         AquiferCoder.phpcs(AquiferCoderConfig.phpcs.targets);
       }
+      // No valid targets were provided.
       else {
         Aquifer.console.log('No targets defined for PHP linting.', 'notice');
       }
@@ -128,7 +204,7 @@ module.exports = function(Aquifer, AquiferCoderConfig) {
       ignorePath: AquiferCoderConfig.eslint.ignore
     });
 
-    // Execute eslint on js files.
+    // Run eslint on targets.
     var report = eslint.executeOnFiles(targets);
 
     // Loop through report results, and log accordingly.
@@ -152,7 +228,7 @@ module.exports = function(Aquifer, AquiferCoderConfig) {
         console.log(log);
       });
 
-      // newline.
+      // Newline.
       console.log();
     });
   }
@@ -179,7 +255,7 @@ module.exports = function(Aquifer, AquiferCoderConfig) {
       }
     });
 
-    // Run phplint on custom modules and themes.
+    // Run phplint on targets.
     phplint(files, function (err) {
       if (err) {
         console.log(err.message);
@@ -195,17 +271,17 @@ module.exports = function(Aquifer, AquiferCoderConfig) {
     // Define phpcs command and options as an array.
     let command = [
       path.join(__dirname, '/vendor/bin/phpcs'),
-      '--standard="' + AquiferCoderConfig.phpcs.config + '"',
-      '--extensions="' + AquiferCoderConfig.phpcs.extensions + '"',
-      '--ignore="' + AquiferCoderConfig.phpcs.ignore + '"'
-    ];
+        '--standard="' + AquiferCoderConfig.phpcs.config + '"',
+        '--extensions="' + AquiferCoderConfig.phpcs.extensions + '"',
+        '--ignore="' + AquiferCoderConfig.phpcs.ignore + '"'
+      ];
 
     // Add target directories to the command array.
     _.forEach(targets, function(target) {
       command.push(path.join(Aquifer.project.directory, target));
     });
 
-    // Execute phpcs.
+    // Run phpcs on targets.
     var report = syncExec(command.join(' '));
 
     // Log phpcs errors.
