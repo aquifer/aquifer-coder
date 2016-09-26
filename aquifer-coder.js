@@ -22,8 +22,8 @@ module.exports = function(Aquifer, AquiferCoderConfig) {
 
   // Turn any passed-in paths into full paths.
   if (AquiferCoderConfig.hasOwnProperty('eslint')) {
-    if (AquiferCoderConfig.hasOwnProperty('standard')) {
-      AquiferCoderConfig.eslint.standard = path.join(Aquifer.projectDir, AquiferCoderConfig.eslint.standard);
+    if (AquiferCoderConfig.hasOwnProperty('config')) {
+      AquiferCoderConfig.eslint.config = path.join(Aquifer.projectDir, AquiferCoderConfig.eslint.config);
     }
 
     if (AquiferCoderConfig.hasOwnProperty('ignore')) {
@@ -32,8 +32,8 @@ module.exports = function(Aquifer, AquiferCoderConfig) {
   }
 
   if (AquiferCoderConfig.hasOwnProperty('phpcs')) {
-    if (AquiferCoderConfig.hasOwnProperty('standard')) {
-      AquiferCoderConfig.phpcs.standard = path.join(Aquifer.projectDir, AquiferCoderConfig.phpcs.standard);
+    if (AquiferCoderConfig.hasOwnProperty('config')) {
+      AquiferCoderConfig.phpcs.config = path.join(Aquifer.projectDir, AquiferCoderConfig.phpcs.config);
     }
   }
 
