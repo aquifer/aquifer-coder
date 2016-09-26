@@ -26,23 +26,25 @@ _in your `aquifer.json` file:_
 "extensions": {
   "aquifer-coder": {
     "source": "aquifer-coder",
-    "eslint": {
-      "config": "relative/path/to/.eslintrc",
-      "ignore": "relative/path/to/.eslintignore"
-      "targets": [
-        "modules/custom",
-        "themes/custom",
-        "*.js"
-      ]
-    },
-    "phpcs": {
-      "config": "relative/path/to/phpcsStandardFile"
-      "ignore": "*.views_default.inc,*.context.inc"
-      "targets": [
-        "modules/custom",
-        "themes/custom"
-      ],
-      "extensions": "php,module,inc,install,test,profile,theme"
+    "config": {
+      "eslint": {
+        "config": "relative/path/to/.eslintrc",
+        "ignore": "relative/path/to/.eslintignore"
+        "targets": [
+          "modules/custom",
+          "themes/custom",
+          "*.js"
+        ]
+      },
+      "phpcs": {
+        "config": "relative/path/to/phpcsStandardFile"
+        "ignore": "*.views_default.inc,*.context.inc"
+        "targets": [
+          "modules/custom",
+          "themes/custom"
+        ],
+        "extensions": "php,module,inc,install,test,profile,theme"
+      }
     }
   }
 }
