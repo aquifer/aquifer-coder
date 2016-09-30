@@ -50,7 +50,7 @@ module.exports = function(Aquifer, AquiferCoderConfig) {
     },
     phpcs: {
       config: path.join(__dirname, '/vendor/drupalmodule/coder/coder_sniffer/Drupal'),
-      ignore: "*.apachesolr_environments.inc,*.apachesolr_search_defaults.inc,*.context.inc,*.features.*.inc,*.features.inc,*.field_group.inc,*.pages_default.inc,*.strongarm.inc,*.views_default.inc",
+      ignore: '*.apachesolr_environments.inc,*.apachesolr_search_defaults.inc,*.context.inc,*.features.*.inc,*.features.inc,*.field_group.inc,*.pages_default.inc,*.strongarm.inc,*.views_default.inc',
       targets: [
         'modules/custom',
         'themes/custom'
@@ -190,6 +190,7 @@ module.exports = function(Aquifer, AquiferCoderConfig) {
 
   /**
    * Run eslint on custom files in project.
+   * @param {Object[]} targets an array of target paths to lint.
    * @returns {undefined} nothing.
    */
   AquiferCoder.eslint = function (targets) {
@@ -235,6 +236,7 @@ module.exports = function(Aquifer, AquiferCoderConfig) {
 
   /**
    * Lints PHP code in codebase.
+   * @param {Object[]} targets an array of target paths to lint.
    * @returns {undefined} nothing.
    */
   AquiferCoder.phplint = function (targets) {
@@ -265,16 +267,17 @@ module.exports = function(Aquifer, AquiferCoderConfig) {
 
   /**
    * Runs phpcs on PHP code in codebase.
+   * @param {Object[]} targets an array of target paths to lint.
    * @returns {undefined} nothing.
    */
   AquiferCoder.phpcs = function (targets) {
     // Define phpcs command and options as an array.
     let command = [
       path.join(__dirname, '/vendor/bin/phpcs'),
-        '--standard="' + AquiferCoderConfig.phpcs.config + '"',
-        '--extensions="' + AquiferCoderConfig.phpcs.extensions + '"',
-        '--ignore="' + AquiferCoderConfig.phpcs.ignore + '"'
-      ];
+      '--standard="' + AquiferCoderConfig.phpcs.config + '"',
+      '--extensions="' + AquiferCoderConfig.phpcs.extensions + '"',
+      '--ignore="' + AquiferCoderConfig.phpcs.ignore + '"'
+    ];
 
     // Add target directories to the command array.
     _.forEach(targets, function(target) {
