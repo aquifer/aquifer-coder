@@ -5,7 +5,7 @@
   "main": "aquifer-coder.js",
   "dependencies": {
     "colors": "^1.1.2",
-    "eslint": "^1.5.1",
+    "eslint": "^2.13.1",
     "fs-extra": "^0.24.0",
     "jscs": "^2.2.1",
     "lodash": "^3.10.1",
